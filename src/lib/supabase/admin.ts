@@ -4,10 +4,10 @@ import { env } from '@/lib/env'
 
 /** Service-role client. Bypasses RLS: server-side use only, never import from client code. */
 export function createAdminClient() {
-  const serviceRoleKey = env.SUPABASE_SERVICE_ROLE_KEY
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim()
   if (!serviceRoleKey) {
     throw new Error(
-      'SUPABASE_SERVICE_ROLE_KEY is not set. It is required to create the admin Supabase client.',
+      'SUPABASE_SERVICE_ROLE_KEY is not set (missing, empty or whitespace-only). It is required to create the admin Supabase client.',
     )
   }
   return createClient(env.NEXT_PUBLIC_SUPABASE_URL, serviceRoleKey, {

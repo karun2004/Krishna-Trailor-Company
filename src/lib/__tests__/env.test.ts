@@ -1,4 +1,8 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
+
+const createClientSpy = vi.hoisted(() => vi.fn(() => ({ __client: true })))
+vi.mock('@supabase/supabase-js', () => ({ createClient: createClientSpy }))
+
 import { parseEnv } from '../env'
 
 const valid: Record<string, string | undefined> = {
@@ -23,16 +27,10 @@ describe('parseEnv', () => {
     ).toThrow(/NEXT_PUBLIC_SUPABASE_URL/)
   })
 
-  it('returns the typed object for valid input, service key optional', () => {
+  it('returns the typed object for valid input', () => {
     const env = parseEnv(valid)
     expect(env.NEXT_PUBLIC_SUPABASE_URL).toBe('http://127.0.0.1:54321')
     expect(env.NEXT_PUBLIC_SUPABASE_ANON_KEY).toBe('anon-key')
-    expect(env.SUPABASE_SERVICE_ROLE_KEY).toBeUndefined()
-  })
-
-  it('passes the service role key through when present', () => {
-    const env = parseEnv({ ...valid, SUPABASE_SERVICE_ROLE_KEY: 'svc' })
-    expect(env.SUPABASE_SERVICE_ROLE_KEY).toBe('svc')
   })
 })
 
@@ -63,16 +61,31 @@ describe('createAdminClient', () => {
   it('throws a readable error naming SUPABASE_SERVICE_ROLE_KEY when it is absent', async () => {
     vi.stubEnv('NEXT_PUBLIC_SUPABASE_URL', 'http://127.0.0.1:54321')
     vi.stubEnv('NEXT_PUBLIC_SUPABASE_ANON_KEY', 'anon-key')
-    vi.stubEnv('SUPABASE_SERVICE_ROLE_KEY', '')
+    vi.stubEnv('SUPABASE_SERVICE_ROLE_KEY', undefined)
     const { createAdminClient } = await load()
     expect(() => createAdminClient()).toThrow(/SUPABASE_SERVICE_ROLE_KEY/)
   })
 
-  it('returns a client when the key is present', async () => {
+  it.each(['', '   \t\n'])('throws when the key is empty or whitespace-only (%j)', async (value) => {
     vi.stubEnv('NEXT_PUBLIC_SUPABASE_URL', 'http://127.0.0.1:54321')
     vi.stubEnv('NEXT_PUBLIC_SUPABASE_ANON_KEY', 'anon-key')
-    vi.stubEnv('SUPABASE_SERVICE_ROLE_KEY', 'svc')
+    vi.stubEnv('SUPABASE_SERVICE_ROLE_KEY', value)
     const { createAdminClient } = await load()
-    expect(createAdminClient()).toBeDefined()
+    expect(() => createAdminClient()).toThrow(/SUPABASE_SERVICE_ROLE_KEY/)
+  })
+
+  it('hands the (trimmed) service key and public URL to the supabase-js client factory', async () => {
+    createClientSpy.mockClear()
+    vi.stubEnv('NEXT_PUBLIC_SUPABASE_URL', 'http://127.0.0.1:54321')
+    vi.stubEnv('NEXT_PUBLIC_SUPABASE_ANON_KEY', 'anon-key')
+    vi.stubEnv('SUPABASE_SERVICE_ROLE_KEY', '  svc-key  ')
+    const { createAdminClient } = await load()
+    const client = createAdminClient()
+    expect(client).toEqual({ __client: true })
+    expect(createClientSpy).toHaveBeenCalledTimes(1)
+    const [url, key, options] = createClientSpy.mock.calls[0] as unknown as [string, string, unknown]
+    expect(url).toBe('http://127.0.0.1:54321')
+    expect(key).toBe('svc-key')
+    expect(options).toMatchObject({ auth: { persistSession: false } })
   })
 })
