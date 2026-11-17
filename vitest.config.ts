@@ -1,4 +1,4 @@
-import { defineConfig } from 'vitest/config'
+import { configDefaults, defineConfig } from 'vitest/config'
 import { fileURLToPath } from 'node:url'
 
 export default defineConfig({
@@ -17,5 +17,7 @@ export default defineConfig({
       NEXT_PUBLIC_SUPABASE_ANON_KEY: 'test-anon-key',
     },
     include: ['src/**/*.test.ts', 'src/**/*.test.tsx'],
+    // Integration tests need a live local Supabase; run them with `pnpm test:int`.
+    exclude: [...configDefaults.exclude, '**/*.int.test.ts'],
   },
 })
