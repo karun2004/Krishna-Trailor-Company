@@ -64,15 +64,32 @@ export type TestUser = {
   email: string
   /** Client signed in as this user (role `authenticated`). */
   client: SupabaseClient
-  /** Delete the auth user (cascades to its profile row). */
+  /** Delete the auth user (cascades to its profile row). Idempotent; throws if deletion genuinely fails. */
   remove: () => Promise<void>
+}
+
+/** Delete an auth user; an already-missing user is fine (idempotent), anything else throws. */
+async function deleteAuthUser(svc: SupabaseClient, id: string): Promise<void> {
+  const { error } = await svc.auth.admin.deleteUser(id)
+  if (error && error.status !== 404 && (error as { code?: string }).code !== 'user_not_found') {
+    throw new Error(`deleteUser(${id}) failed: ${error.message}`)
+  }
 }
 
 /**
  * Create a throwaway confirmed auth user with a runtime-random password,
  * optionally granting it an admin profile via the service role.
+ *
+ * If any step after the auth user is created fails, the user (and its profile,
+ * via ON DELETE CASCADE) is deleted before the original error is rethrown. If
+ * that cleanup also fails, BOTH errors are reported.
+ *
+ * `profileRole` exists so tests can force the profile insert to fail.
  */
-export async function createTestUser(opts: { admin: boolean }): Promise<TestUser> {
+export async function createTestUser(opts: {
+  admin: boolean
+  profileRole?: string
+}): Promise<TestUser> {
   const svc = serviceClient()
   const email = `rls-${crypto.randomUUID()}@example.test`
   const password = crypto.randomUUID() + crypto.randomUUID()
@@ -81,20 +98,25 @@ export async function createTestUser(opts: { admin: boolean }): Promise<TestUser
     throw new Error(`createUser failed: ${created.error?.message}`)
   }
   const id = created.data.user.id
-  if (opts.admin) {
-    const { error } = await svc.from('profiles').insert({ id, role: 'admin' })
-    if (error) throw new Error(`profile insert failed: ${error.message}`)
-  }
-  const { url, anonKey } = localEnv()
-  const client = createClient(url, anonKey, noSession)
-  const signedIn = await client.auth.signInWithPassword({ email, password })
-  if (signedIn.error) throw new Error(`signIn failed: ${signedIn.error.message}`)
-  return {
-    id,
-    email,
-    client,
-    remove: async () => {
-      await svc.auth.admin.deleteUser(id)
-    },
+  try {
+    if (opts.admin) {
+      const { error } = await svc.from('profiles').insert({ id, role: opts.profileRole ?? 'admin' })
+      if (error) throw new Error(`profile insert failed: ${error.message}`)
+    }
+    const { url, anonKey } = localEnv()
+    const client = createClient(url, anonKey, noSession)
+    const signedIn = await client.auth.signInWithPassword({ email, password })
+    if (signedIn.error) throw new Error(`signIn failed: ${signedIn.error.message}`)
+    return { id, email, client, remove: () => deleteAuthUser(svc, id) }
+  } catch (original) {
+    try {
+      await deleteAuthUser(svc, id)
+    } catch (cleanup) {
+      throw new Error(
+        `createTestUser failed AND cleanup failed.\n  original: ${String(original)}\n  cleanup: ${String(cleanup)}`,
+        { cause: original },
+      )
+    }
+    throw original
   }
 }
