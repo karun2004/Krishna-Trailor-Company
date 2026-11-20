@@ -17,7 +17,8 @@ export type MediaRef = {
 
 export type WithMedia<T> = T & { media: MediaRef | null }
 
-type Base = { id: string; sort_order: number; verification_note: string | null }
+/** Public rows never carry verification_note: anon has no column grant for it. */
+type Base = { id: string; sort_order: number }
 
 export type Division = Base & {
   slug: string

@@ -137,16 +137,29 @@ describe('query layer', () => {
     expect((await getSiteSettings(opts))[mk('phone')]).toBe('123')
   })
 
-  // Review Focus 5: entirely unpublished section
-  it('getTestimonials returns [] when all are unpublished', async () => {
-    // Other agents' seed rows may exist; assert on our own rows being excluded and, if the table has no
-    // published rows at all, that the result is exactly [].
-    await ins('testimonials', { author_name: mk('a1'), quote: 'q', published: false })
-    await ins('testimonials', { author_name: mk('a2'), quote: 'q', published: false })
-    const all = await getTestimonials(opts)
-    expect(all.some((t) => t.author_name.startsWith(`q-${run}`))).toBe(false)
-    const { count } = await svc.from('testimonials').select('*', { count: 'exact', head: true }).eq('published', true)
-    if (count === 0) expect(all).toEqual([])
+  // Review Focus 5: entirely unpublished section. Seeds may exist, so temporarily unpublish every
+  // row via the service role, assert exactly [], and always restore.
+  async function withAllUnpublished(table: string, fn: () => Promise<void>) {
+    const { data, error } = await svc.from(table).select('id').eq('published', true)
+    if (error) throw error
+    const ids = (data ?? []).map((r) => r.id as string)
+    try {
+      if (ids.length) await svc.from(table).update({ published: false }).in('id', ids)
+      await fn()
+    } finally {
+      if (ids.length) await svc.from(table).update({ published: true }).in('id', ids)
+    }
+  }
+
+  it('getTestimonials returns exactly [] when all are unpublished; requires published AND approved', async () => {
+    await ins('testimonials', { author_name: mk('a1'), quote: 'q', published: false, approved: true })
+    await ins('testimonials', { author_name: mk('a2'), quote: 'q', published: true, approved: false })
+    await ins('testimonials', { author_name: mk('a3'), quote: 'q', published: true, approved: true })
+    const visible = await getTestimonials(opts)
+    expect(visible.map((t) => t.author_name).filter((n) => n.startsWith(`q-${run}`))).toEqual([mk('a3')])
+    await withAllUnpublished('testimonials', async () => {
+      expect(await getTestimonials(opts)).toEqual([])
+    })
   })
 
   it('getClientLogos returns only published, [] when none', async () => {
@@ -156,5 +169,8 @@ describe('query layer', () => {
     await ins('client_logos', { name: mk('c2'), published: true, media_id: mediaId })
     const after = await getClientLogos(opts)
     expect(after.find((c) => c.name === mk('c2'))?.media?.alt).toBe('alt-m')
+    await withAllUnpublished('client_logos', async () => {
+      expect(await getClientLogos(opts)).toEqual([])
+    })
   })
 })

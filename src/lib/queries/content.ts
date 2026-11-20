@@ -6,7 +6,7 @@ import type {
   WithMedia,
 } from './types'
 
-const BASE = 'id, sort_order, verification_note'
+const BASE = 'id, sort_order'
 const ord = { ascending: true } as const
 
 export async function getDivision(slug: string, opts?: QueryOpts): Promise<WithMedia<Division> | null> {
@@ -112,7 +112,7 @@ export async function getTestimonials(opts?: QueryOpts): Promise<Testimonial[]> 
   return check<Testimonial[]>(
     await db.from('testimonials')
       .select(`${BASE}, author_name, author_role, company, quote, division_id`)
-      .eq('published', true).order('sort_order', ord),
+      .eq('published', true).eq('approved', true).order('sort_order', ord),
     'testimonials',
   )
 }
