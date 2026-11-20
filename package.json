@@ -9,7 +9,9 @@
     "lint": "eslint",
     "test": "vitest run",
     "test:int": "vitest run --config vitest.int.config.ts",
-    "check:leak": "scripts/check-no-secret-leak.sh"
+    "check:leak": "scripts/check-no-secret-leak.sh",
+    "e2e": "playwright test",
+    "create-admin": "tsx --env-file=.env.local scripts/create-admin.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",
@@ -22,6 +24,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@playwright/test": "^1.65.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
@@ -30,6 +33,7 @@
     "eslint-config-next": "15.5.29",
     "supabase": "^3.2.0",
     "tailwindcss": "^4",
+    "tsx": "^4.23.15",
     "typescript": "^5",
     "vitest": "^5.1.0"
   },
