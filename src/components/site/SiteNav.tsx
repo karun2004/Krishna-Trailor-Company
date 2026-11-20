@@ -38,14 +38,14 @@ export function SiteNav() {
   }, [open, close])
 
   const linkCls = (href: string) =>
-    cn('font-mono text-[11px] uppercase tracking-[0.14em] transition-colors hover:text-[var(--accent)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--accent)]',
-      isActive(pathname, href) && 'text-[var(--accent)]')
+    cn('font-mono text-[11px] uppercase tracking-[0.14em] transition-colors hover:text-[#A64D00] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--accent)]',
+      isActive(pathname, href) && 'text-[#A64D00]')
 
   return (
     <>
       <header className="sticky top-0 z-50 border-b border-black/10 bg-white/90 text-black backdrop-blur">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-5 md:px-8">
-          <Link href="/" className="font-display text-lg font-extrabold uppercase tracking-tight" aria-label="Krishna Trailor Company home">KTC</Link>
+          <Link href="/" className="font-display text-lg font-extrabold uppercase tracking-tight" aria-label="KTC, Krishna Trailor Company home">KTC</Link>
           <nav aria-label="Primary" className="hidden items-center gap-4 md:flex lg:gap-6">
             {NAV_LINKS.map((l) => (
               <Link key={l.href} href={l.href} className={linkCls(l.href)} aria-current={isActive(pathname, l.href) ? 'page' : undefined}>{l.label}</Link>

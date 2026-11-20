@@ -14,8 +14,8 @@ export function GhostHeadline({ children, on = 'light', as: Tag = 'h2', classNam
       className={cn(
         'font-display font-extrabold uppercase leading-[0.9] tracking-tighter text-[clamp(3rem,13vw,11rem)] [-webkit-text-stroke-width:1.5px] select-none',
         on === 'dark'
-          ? 'text-white/[0.07] [-webkit-text-stroke-color:rgba(255,255,255,0.85)]'
-          : 'text-transparent [-webkit-text-stroke-color:#101010]',
+          ? 'text-white [-webkit-text-fill-color:transparent] [-webkit-text-stroke-color:rgba(255,255,255,0.85)]'
+          : 'text-[#101010] [-webkit-text-fill-color:transparent] [-webkit-text-stroke-color:#101010]',
         className,
       )}
     >

@@ -26,7 +26,7 @@ export async function SiteFooter() {
           <MonoLabel className="mb-4">Explore</MonoLabel>
           <ul className="space-y-2">
             {NAV_LINKS.map((l) => (
-              <li key={l.href}><Link href={l.href} className="text-sm text-white/80 hover:text-[var(--accent)]">{l.label}</Link></li>
+              <li key={l.href}><Link href={l.href} className="inline-block py-1 text-sm text-white/80 hover:text-[var(--accent)]">{l.label}</Link></li>
             ))}
           </ul>
         </nav>
@@ -38,18 +38,18 @@ export async function SiteFooter() {
                 <address key={o.name} className="not-italic" data-office={o.isHead ? 'head' : undefined}>
                   <p className="font-semibold text-white">{o.name}</p>
                   {o.address && <p>{o.address}</p>}
-                  {o.phone && <p><a href={tel(o.phone)} className="hover:text-[var(--accent)]">{o.phone}</a></p>}
-                  {o.email && <p><a href={`mailto:${o.email}`} className="hover:text-[var(--accent)]">{o.email}</a></p>}
-                  {o.mapUrl && <p><a href={o.mapUrl} target="_blank" rel="noopener noreferrer" className="underline">Map</a></p>}
+                  {o.phone && <p><a href={tel(o.phone)} className="inline-block py-1 hover:text-[var(--accent)]">{o.phone}</a></p>}
+                  {o.email && <p><a href={`mailto:${o.email}`} className="inline-block py-1 hover:text-[var(--accent)]">{o.email}</a></p>}
+                  {o.mapUrl && <p><a href={o.mapUrl} target="_blank" rel="noopener noreferrer" className="inline-block py-1 underline">Map</a></p>}
                 </address>
               ))}
               {(data.phones.length > 0 || (data.email && data.offices.every((o) => o.email !== data.email))) && (
                 <ul className="space-y-1">
                   {data.phones.map((p) => (
-                    <li key={p.number}>{p.name ? `${p.name}: ` : ''}<a href={tel(p.number)} className="hover:text-[var(--accent)]">{p.number}</a></li>
+                    <li key={p.number}>{p.name ? `${p.name}: ` : ''}<a href={tel(p.number)} className="inline-block py-1 hover:text-[var(--accent)]">{p.number}</a></li>
                   ))}
                   {data.email && data.offices.every((o) => o.email !== data.email) && (
-                    <li><a href={`mailto:${data.email}`} className="hover:text-[var(--accent)]">{data.email}</a></li>
+                    <li><a href={`mailto:${data.email}`} className="inline-block py-1 hover:text-[var(--accent)]">{data.email}</a></li>
                   )}
                 </ul>
               )}

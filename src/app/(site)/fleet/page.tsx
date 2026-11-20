@@ -51,12 +51,12 @@ export default async function FleetPage({ searchParams }: { searchParams: Promis
                 <Card key={i.id} as="li" variant="soft" padded={false}>
                   {i.media && <MediaImage media={i.media} aspect="4/3" sizes="(min-width:1024px) 33vw, (min-width:768px) 50vw, 100vw" />}
                   <div className="p-6">
-                    <p className="font-mono text-xs uppercase tracking-wider text-black/60">{label(i.category)}</p>
+                    <p className="font-mono text-xs uppercase tracking-wider text-black/70">{label(i.category)}</p>
                     <h3 className="mt-1 font-display text-xl font-semibold uppercase tracking-tight">{i.name}</h3>
                     {i.description && <p className="mt-3 text-sm text-black/70">{i.description}</p>}
                     {rows.length > 0 && (
                       <dl className="mt-4 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-sm">
-                        {rows.map(([k, v]) => (<div key={k} className="contents"><dt className="font-mono text-xs uppercase text-black/60">{k}</dt><dd>{v}</dd></div>))}
+                        {rows.map(([k, v]) => (<div key={k} className="contents"><dt className="font-mono text-xs uppercase text-black/70">{k}</dt><dd>{v}</dd></div>))}
                       </dl>
                     )}
                   </div>

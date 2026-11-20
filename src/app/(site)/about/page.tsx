@@ -30,7 +30,7 @@ export default async function AboutPage() {
             {timeline.map((m) => (
               <li key={m.id}>
                 <Reveal as="div">
-                  <p className="font-mono text-sm uppercase tracking-wider text-orange">{m.year}</p>
+                  <p className="font-mono text-sm uppercase tracking-wider text-orange-text">{m.year}</p>
                   <h3 className="mt-1 font-display text-xl font-semibold uppercase">{m.title}</h3>
                   {m.description && <p className="mt-2 max-w-2xl text-black/70">{m.description}</p>}
                   {m.media && <MediaImage media={m.media} aspect="16/9" sizes="(min-width:768px) 600px, 100vw" className="mt-4 max-w-xl rounded-xl" />}

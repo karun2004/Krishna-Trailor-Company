@@ -8,7 +8,7 @@ export function ServiceList({ services, tone }: { services: WithMedia<Service>[]
       <RevealGroup as="ol" className="divide-y divide-black/15 border-y border-black/15">
         {services.map((s, i) => (
           <li key={s.id} className="grid gap-2 py-6 md:grid-cols-[6rem_1fr_2fr] md:items-baseline">
-            <span className="font-mono text-xs tracking-[0.18em] text-black/60">{String(i + 1).padStart(2, '0')}</span>
+            <span className="font-mono text-xs tracking-[0.18em] text-black/70">{String(i + 1).padStart(2, '0')}</span>
             <h3 className="font-display text-2xl font-bold uppercase leading-tight">{s.name}</h3>
             {s.summary ? <p className="text-black/70">{s.summary}</p> : <span />}
           </li>

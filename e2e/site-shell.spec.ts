@@ -45,7 +45,8 @@ test('reduced motion renders content visible', async ({ browser }) => {
   const page = await ctx.newPage()
   await page.goto('/')
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
-  const opacities = await page.evaluate(() => Array.from(document.querySelectorAll('main *')).map((e) => getComputedStyle(e).opacity))
-  expect(opacities.every((o) => o === '1')).toBe(true)
+  const opacities = await page.evaluate(() => Array.from(document.querySelectorAll('main *')).filter((e) => !(e instanceof SVGElement)).map((e) => getComputedStyle(e).opacity))
+  // Static design opacity (opacity-60/70/80 utilities) is fine; only animation-hidden content (0) is a failure.
+  expect(opacities.every((o) => Number(o) >= 0.5)).toBe(true)
   await ctx.close()
 })

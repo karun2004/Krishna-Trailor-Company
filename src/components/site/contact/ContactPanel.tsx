@@ -13,7 +13,7 @@ export function ContactPanel({ data }: { data: ContactPanelData }) {
       {offices.map((o) => (
         <Card key={o.name} variant="soft">
           <MonoLabel>{o.isHead ? 'Head office' : 'Office'}</MonoLabel>
-          <h3 className="mt-3 font-display text-xl uppercase">{o.name}</h3>
+          <h2 className="mt-3 font-display text-xl uppercase">{o.name}</h2>
           {o.address && <p className="mt-2">{o.address}</p>}
           {o.phone && <p className="mt-2"><a className={link} href={telHref(o.phone)}>{o.phone}</a></p>}
           {o.email && <p className="mt-1 break-all"><a className={link} href={`mailto:${o.email}`}>{o.email}</a></p>}

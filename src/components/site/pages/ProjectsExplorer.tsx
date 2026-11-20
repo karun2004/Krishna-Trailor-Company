@@ -54,7 +54,7 @@ export function ProjectsExplorer({ projects, divisions }: { projects: ProjectWit
               <MediaImage media={p.media ?? p.images.find((i) => i.media)?.media ?? null} aspect="4/3" sizes="(min-width:1024px) 33vw, (min-width:768px) 50vw, 100vw" />
               <div className="p-5">
                 <h3 className="font-display text-lg font-semibold uppercase tracking-tight">{p.title}</h3>
-                {p.location && <p className="mt-1 font-mono text-xs uppercase tracking-wider text-black/60">{p.location}</p>}
+                {p.location && <p className="mt-1 font-mono text-xs uppercase tracking-wider text-black/70">{p.location}</p>}
                 {p.description && <p className="mt-3 line-clamp-3 text-sm text-black/70">{p.description}</p>}
               </div>
             </>

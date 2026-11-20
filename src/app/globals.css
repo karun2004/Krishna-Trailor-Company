@@ -5,6 +5,8 @@
   --color-white: #FFFFFF;
   --color-soft: #F5F6F7;
   --color-orange: #F28C28;
+  /* Accessible small-text orange for light backgrounds (>=4.5:1 on white). Use #F28C28 only for fills, borders, large text or dark backgrounds. */
+  --color-orange-text: #A64D00;
   --color-blue: #DCEBFF;
   --color-navy: #14243A;
 
@@ -29,6 +31,7 @@ body {
   --bg: #ffffff;
   --fg: #101010;
   --accent: #f28c28;
+  --accent-text: #a64d00;
   --accent-fg: #101010;
   --tint: #f5f6f7;
 }
@@ -37,6 +40,7 @@ body {
   --bg: #0a0a0a;
   --fg: #ffffff;
   --accent: #f28c28;
+  --accent-text: #f28c28;
   --accent-fg: #101010;
   --tint: #151515;
 }
@@ -46,6 +50,7 @@ body {
   --bg: #ffffff;
   --fg: #14243a;
   --accent: #14243a;
+  --accent-text: #14243a;
   --accent-fg: #ffffff;
   --tint: #dcebff;
 }
