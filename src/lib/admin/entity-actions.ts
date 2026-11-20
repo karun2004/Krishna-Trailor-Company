@@ -19,6 +19,8 @@ export const ADMIN_TABLES = [
   'faqs',
   'client_logos',
   'office_locations',
+  'page_content',
+  'seo_metadata',
 ] as const
 export type AdminTable = (typeof ADMIN_TABLES)[number]
 
