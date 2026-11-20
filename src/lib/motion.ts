@@ -14,7 +14,7 @@ export type MotionKit = { gsap: typeof import('gsap').gsap; ScrollTrigger: typeo
  * No-ops entirely (setup never called, gsap never loaded) when the user prefers reduced motion,
  * so server-rendered content stays in its final, visible state.
  */
-export function useScrollMotion(scope: RefObject<HTMLElement | null>, setup: (kit: MotionKit) => void, deps: unknown[] = []) {
+export function useScrollMotion(scope: RefObject<Element | null>, setup: (kit: MotionKit) => void, deps: unknown[] = []) {
   useEffect(() => {
     if (!scope.current || prefersReducedMotion()) return
     let cancelled = false

@@ -1,8 +1,8 @@
-import { Button, MonoLabel } from '@/components/site'
+import { Button, MonoLabel, Reveal } from '@/components/site'
 
 export function DivisionCta({ type, label, phones, heading = 'Talk to us' }: { type: 'industrial' | 'travel'; label?: string | null; phones?: { name?: string; number: string }[]; heading?: string }) {
   return (
-    <div>
+    <Reveal>
       <MonoLabel>Get in touch</MonoLabel>
       <h2 className="mt-4 font-display text-3xl font-extrabold uppercase md:text-5xl">{heading}</h2>
       <div className="mt-8 flex flex-wrap items-center gap-3">
@@ -11,6 +11,6 @@ export function DivisionCta({ type, label, phones, heading = 'Talk to us' }: { t
           <Button key={p.number} href={`tel:${p.number.replace(/[^\d+]/g, '')}`} variant="outline">{p.name ? `${p.name} ` : ''}{p.number}</Button>
         ))}
       </div>
-    </div>
+    </Reveal>
   )
 }

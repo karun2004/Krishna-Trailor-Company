@@ -1,3 +1,4 @@
+import { RevealGroup } from '../anim'
 const STEPS = [
   'Enquiry & route survey',
   'Permits & approvals',
@@ -16,14 +17,14 @@ export function HaulageProcess() {
         <line x1="50" y1="12" x2="650" y2="12" stroke="currentColor" strokeOpacity="0.35" strokeDasharray="4 6" />
         {STEPS.map((_, i) => (<circle key={i} cx={50 + i * 100} cy="12" r="6" fill="#f28c28" />))}
       </svg>
-      <ol className="grid gap-px bg-white/15 sm:grid-cols-2 lg:grid-cols-7">
+      <RevealGroup as="ol" className="grid gap-px bg-white/15 sm:grid-cols-2 lg:grid-cols-7" stagger={0.09}>
         {STEPS.map((s, i) => (
           <li key={s} className="bg-[#0a0a0a] p-5">
             <p className="font-mono text-xs tracking-[0.18em] text-[var(--accent)]">STEP {String(i + 1).padStart(2, '0')}</p>
             <p className="mt-3 font-display text-base font-bold uppercase leading-tight">{s}</p>
           </li>
         ))}
-      </ol>
+      </RevealGroup>
       <p className="mt-4 font-mono text-xs uppercase tracking-[0.14em] text-white/50">Process outline. General industry sequence for illustration.</p>
     </div>
   )

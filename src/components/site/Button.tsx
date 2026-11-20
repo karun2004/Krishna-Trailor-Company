@@ -18,7 +18,7 @@ export type ButtonProps = ButtonLinkProps | ButtonButtonProps
 
 export const buttonClass = (variant: ButtonVariant = 'primary-orange', className?: string) =>
   cn(
-    'inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-6 py-3 font-mono text-xs font-medium uppercase tracking-[0.14em] transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)] disabled:opacity-50',
+    'inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-6 py-3 font-mono text-xs font-medium uppercase tracking-[0.14em] transition duration-200 ease-out motion-safe:hover:-translate-y-0.5 motion-safe:active:translate-y-0 motion-safe:active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)] disabled:opacity-50',
     VARIANTS[variant],
     className,
   )

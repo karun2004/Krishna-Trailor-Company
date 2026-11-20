@@ -16,5 +16,5 @@ const V = {
 }
 
 export function Card({ variant = 'light', as: Tag = 'div', padded = true, className, children }: CardProps) {
-  return <Tag className={cn('overflow-hidden rounded-2xl', V[variant], padded && 'p-6 md:p-8', className)}>{children}</Tag>
+  return <Tag className={cn('overflow-hidden rounded-2xl transition duration-300 ease-out motion-safe:hover:-translate-y-1 hover:shadow-lg focus-within:shadow-lg', V[variant], padded && 'p-6 md:p-8', className)}>{children}</Tag>
 }
