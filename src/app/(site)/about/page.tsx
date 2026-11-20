@@ -1,11 +1,11 @@
 import { GhostHeadline, MediaImage, MonoLabel, Reveal, SectionShell } from '@/components/site'
 import { ClientLogosStrip } from '@/components/site/pages/ClientLogosStrip'
 import { CtaBlock } from '@/components/site/pages/CtaBlock'
-import { pageMetadata } from '@/components/site/pages/seo'
 import { getOffices, getTimeline } from '@/lib/queries'
+import { buildMetadata } from '@/lib/seo'
 
 export const dynamic = 'force-dynamic'
-export const generateMetadata = () => pageMetadata('about', 'About Krishna Trailor Company')
+export const generateMetadata = () => buildMetadata('about', { title: 'About', description: 'About Krishna Trailor Company, a trailer transport business in Manimajra, Chandigarh, founded in 1987.', path: '/about' })
 
 export default async function AboutPage() {
   const [timeline, offices] = await Promise.all([getTimeline(), getOffices()])

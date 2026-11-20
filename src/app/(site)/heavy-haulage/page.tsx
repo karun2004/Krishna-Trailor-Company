@@ -1,8 +1,9 @@
 import { Button, GhostHeadline, MediaImage, MonoLabel, SectionShell } from '@/components/site'
-import { DivisionCta, FaqAccordion, FleetList, HaulageProcess, ProjectsStrip, ServiceList, divisionMetadata, loadDivisionPage } from '@/components/site/division'
+import { DivisionCta, FaqAccordion, FleetList, HaulageProcess, ProjectsStrip, ServiceList, loadDivisionPage } from '@/components/site/division'
+import { buildMetadata } from '@/lib/seo'
 
 export const revalidate = 60
-export const generateMetadata = () => divisionMetadata('haulage')
+export const generateMetadata = () => buildMetadata('heavy-haulage', { title: 'Heavy Haulage', description: 'Heavy haulage transport with trailers and hydraulic axle systems from Krishna Trailor Company.', path: '/heavy-haulage' })
 
 export default async function HeavyHaulagePage() {
   const { division, services, fleet, faqs, projects, phones, intro } = await loadDivisionPage('haulage')

@@ -2,11 +2,11 @@ import { GhostHeadline, MediaImage, MonoLabel, SectionShell } from '@/components
 import { ClientLogosStrip } from '@/components/site/pages/ClientLogosStrip'
 import { CtaBlock } from '@/components/site/pages/CtaBlock'
 import { ProjectsExplorer } from '@/components/site/pages/ProjectsExplorer'
-import { pageMetadata } from '@/components/site/pages/seo'
 import { getDivision, getGalleryAlbums, getProjects } from '@/lib/queries'
+import { buildMetadata } from '@/lib/seo'
 
 export const dynamic = 'force-dynamic'
-export const generateMetadata = () => pageMetadata('projects', 'Projects')
+export const generateMetadata = () => buildMetadata('projects', { title: 'Projects', description: 'Selected projects delivered by Krishna Trailor Company.', path: '/projects' })
 
 const DIVISION_SLUGS = ['krishna-trailor', 'heavy-machinery', 'radhe-travels']
 

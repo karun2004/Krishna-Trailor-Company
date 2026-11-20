@@ -1,18 +1,14 @@
-import type { Metadata } from 'next'
 import { GhostHeadline, MonoLabel, SectionShell } from '@/components/site'
 import { ContactForms } from '@/components/site/contact/ContactForms'
 import { ContactPanel } from '@/components/site/contact/ContactPanel'
 import { buildContactData } from '@/components/site/contact/contact-data'
-import { getOffices, getSeo, getSiteSettings } from '@/lib/queries/content'
+import { JsonLd } from '@/components/site/JsonLd'
+import { buildLocalBusinessJsonLd } from '@/lib/jsonld'
+import { getOffices, getSiteSettings } from '@/lib/queries/content'
+import { buildMetadata, siteUrl } from '@/lib/seo'
 
-export async function generateMetadata(): Promise<Metadata> {
-  const seo = await getSeo('contact')
-  return {
-    title: seo?.title ?? 'Contact | Krishna Trailor Company',
-    ...(seo?.meta_description ? { description: seo.meta_description } : {}),
-    ...(seo?.canonical_url ? { alternates: { canonical: seo.canonical_url } } : {}),
-  }
-}
+export const generateMetadata = () =>
+  buildMetadata('contact', { title: 'Contact', description: 'Contact Krishna Trailor Company at Manimajra, Chandigarh for a quote.', path: '/contact' })
 
 export default async function ContactPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const sp = await searchParams
@@ -23,6 +19,7 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
 
   return (
     <>
+      <JsonLd data={buildLocalBusinessJsonLd(settings, offices, siteUrl())} />
       <SectionShell variant="black">
         <MonoLabel index={1}>Contact</MonoLabel>
         <GhostHeadline as="h1" on="dark" className="mt-6">Get a quote</GhostHeadline>

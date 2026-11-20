@@ -1,8 +1,9 @@
 import { Button, GhostHeadline, MediaImage, MonoLabel, SectionShell } from '@/components/site'
-import { DivisionCta, FaqAccordion, FleetList, ProjectsStrip, ServiceList, divisionMetadata, loadDivisionPage } from '@/components/site/division'
+import { DivisionCta, FaqAccordion, FleetList, ProjectsStrip, ServiceList, loadDivisionPage } from '@/components/site/division'
+import { buildMetadata } from '@/lib/seo'
 
 export const revalidate = 60
-export const generateMetadata = () => divisionMetadata('krishna')
+export const generateMetadata = () => buildMetadata('krishna-trailor', { title: 'Krishna Trailor', description: 'Krishna Trailor, the trailer transport division of Krishna Trailor Company, Chandigarh.', path: '/krishna-trailor' })
 
 export default async function KrishnaTrailorPage() {
   const { division, services, fleet, faqs, projects, phones, intro } = await loadDivisionPage('krishna')

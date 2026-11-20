@@ -3,6 +3,9 @@ import {
   getSiteSettings, getTestimonials, getTimeline,
 } from '@/lib/queries'
 import { SectionShell, MonoLabel } from '@/components/site'
+import { JsonLd } from '@/components/site/JsonLd'
+import { buildLocalBusinessJsonLd } from '@/lib/jsonld'
+import { buildMetadata, siteUrl } from '@/lib/seo'
 import { FaqAccordion } from '@/components/site/home/FaqAccordion'
 import { list, str } from '@/components/site/home/helpers'
 import {
@@ -11,6 +14,8 @@ import {
 } from '@/components/site/home/Sections'
 
 export const dynamic = 'force-dynamic'
+export const generateMetadata = () =>
+  buildMetadata('home', { title: 'Krishna Trailor Company', description: 'Trailer transport and heavy haulage from Manimajra, Chandigarh. Founded in 1987.', path: '/' })
 
 export default async function Home() {
   const [blocks, settings, services, fleet, projects, timeline, offices, testimonials, faqs, d1, d2, d3] = await Promise.all([
@@ -38,6 +43,7 @@ export default async function Home() {
 
   return (
     <>
+      <JsonLd data={buildLocalBusinessJsonLd(settings, offices, siteUrl())} />
       <Hero headline={headline} ctaLabel={ctaLabel} ctaHref={ctaHref} media={hero?.media ?? d1?.media ?? null} />
       {founded && <Intro founded={founded} founder={founder} />}
       {divisions.length > 0 && <DivisionPanels divisions={divisions} />}

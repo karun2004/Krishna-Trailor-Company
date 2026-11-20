@@ -3,6 +3,8 @@ import { z } from 'zod'
 const schema = z.object({
   NEXT_PUBLIC_SUPABASE_URL: z.url(),
   NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().min(1),
+  // Public origin for canonical URLs, sitemap and JSON-LD. Blank/unset falls back to the local dev origin.
+  NEXT_PUBLIC_SITE_URL: z.preprocess((v) => (v === '' ? undefined : v), z.url().default('http://localhost:3100')),
 })
 
 export type Env = z.infer<typeof schema>
@@ -31,4 +33,5 @@ export function parseEnv(raw: RawEnv): Env {
 export const env: Env = parseEnv({
   NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
   NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+  NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
 })

@@ -1,10 +1,10 @@
 import { Button, Card, GhostHeadline, MediaImage, MonoLabel, SectionShell } from '@/components/site'
 import { CtaBlock } from '@/components/site/pages/CtaBlock'
-import { pageMetadata } from '@/components/site/pages/seo'
 import { getFleetItems } from '@/lib/queries'
+import { buildMetadata } from '@/lib/seo'
 
 export const dynamic = 'force-dynamic'
-export const generateMetadata = () => pageMetadata('fleet', 'Our Fleet')
+export const generateMetadata = () => buildMetadata('fleet', { title: 'Our Fleet', description: 'The trailers, tractors and buses in the Krishna Trailor Company fleet.', path: '/fleet' })
 
 const label = (c: string) => c.replace(/_/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase())
 

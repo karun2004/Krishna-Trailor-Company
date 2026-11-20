@@ -1,8 +1,9 @@
 import { Button, MediaImage, MonoLabel, SectionShell } from '@/components/site'
-import { DivisionCta, FaqAccordion, FleetList, ProjectsStrip, ServiceList, divisionMetadata, loadDivisionPage } from '@/components/site/division'
+import { DivisionCta, FaqAccordion, FleetList, ProjectsStrip, ServiceList, loadDivisionPage } from '@/components/site/division'
+import { buildMetadata } from '@/lib/seo'
 
 export const revalidate = 60
-export const generateMetadata = () => divisionMetadata('radhe')
+export const generateMetadata = () => buildMetadata('radhe-travels', { title: 'Radhe Travels', description: 'Radhe Travels, the passenger bus travel division of Krishna Trailor Company.', path: '/radhe-travels' })
 
 export default async function RadheTravelsPage() {
   const { division, services, fleet, faqs, projects, phones, intro } = await loadDivisionPage('radhe')

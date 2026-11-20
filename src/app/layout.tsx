@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { sora, manrope, mono } from "@/lib/fonts";
+import { siteUrl } from "@/lib/seo";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Krishna Trailor Company",
+  metadataBase: new URL(siteUrl()),
+  title: { default: "Krishna Trailor Company", template: "%s | Krishna Trailor Company" },
 };
 
 export default function RootLayout({
