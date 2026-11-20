@@ -26,6 +26,8 @@ Open items before the site goes live. Part A needs a person at the company or a 
 - [ ] Link and push migrations: `pnpm exec supabase link --project-ref <ref>` then `pnpm exec supabase db push` (uses `SUPABASE_DB_PASSWORD`).
 - [ ] Load the seed content on the hosted project if wanted. `supabase db push` runs migrations only, so insert `supabase/seed.sql` through the SQL editor or a one-off `psql` session. The seed is idempotent.
 - [ ] Set Vercel environment variables: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `NEXT_PUBLIC_SITE_URL` (the real public origin, no trailing slash), and `ENQUIRY_IP_PEPPER` (a long random string). Mark the service-role key as sensitive.
+- [ ] LAUNCH BLOCKER: disable public signups in the hosted Supabase project (Auth -> Providers -> Email -> disable sign-ups; also keep anonymous sign-ins off). `verification_note` is readable by any signed-in non-admin user on published rows (migration 0003 only revokes it from anon), so no one but admins may be able to create an account. Local `supabase/config.toml` already sets `enable_signup = false`.
+- [ ] Set `ENQUIRY_IP_PEPPER` to a secret of at least 16 characters: in production the enquiry API returns 500 without it.
 - [ ] Create the first admin user with `pnpm create-admin` against the hosted project. Use a password manager.
 - [ ] Set up the domain and DNS, and the Vercel project domain. Check the canonical URLs and sitemap after the domain is live.
 - [ ] Set the Supabase Auth site URL and redirect URLs to the live domain.
