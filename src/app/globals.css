@@ -18,3 +18,49 @@ body {
   color: var(--color-black);
   font-family: var(--font-sans);
 }
+
+@theme inline {
+  --color-accent: var(--accent);
+}
+
+/* Division theming: wrap a page in data-division="krishna|haulage|radhe". */
+:root,
+[data-division="krishna"] {
+  --bg: #ffffff;
+  --fg: #101010;
+  --accent: #f28c28;
+  --accent-fg: #101010;
+  --tint: #f5f6f7;
+}
+
+[data-division="haulage"] {
+  --bg: #0a0a0a;
+  --fg: #ffffff;
+  --accent: #f28c28;
+  --accent-fg: #101010;
+  --tint: #151515;
+}
+
+/* Radhe Travels: light identity, no orange anywhere. */
+[data-division="radhe"] {
+  --bg: #ffffff;
+  --fg: #14243a;
+  --accent: #14243a;
+  --accent-fg: #ffffff;
+  --tint: #dcebff;
+}
+
+[data-division] {
+  background: var(--bg);
+  color: var(--fg);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
