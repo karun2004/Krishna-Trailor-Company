@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useId, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { getMediaForPicker, listMediaForPicker, type PickerMedia } from '@/lib/admin/media-actions'
 import { MEDIA_CATEGORIES } from '@/lib/validation/media'
 
@@ -23,6 +24,8 @@ export function MediaPicker({ value, onChange, label, category: initialCategory 
   const uid = useId()
   const dialogRef = useRef<HTMLDialogElement>(null)
   const openerRef = useRef<HTMLButtonElement>(null)
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
   const [selected, setSelected] = useState<PickerMedia | null>(null)
   const [q, setQ] = useState('')
   const [category, setCategory] = useState(initialCategory)
@@ -91,6 +94,7 @@ export function MediaPicker({ value, onChange, label, category: initialCategory 
       </div>
       {error && <p id={`${uid}-err`} className="mt-1 text-sm text-red-700">{error}</p>}
 
+      {mounted && createPortal(
       <dialog
         ref={dialogRef}
         aria-labelledby={`${uid}-title`}
@@ -144,7 +148,9 @@ export function MediaPicker({ value, onChange, label, category: initialCategory 
             )}
           </div>
         </div>
-      </dialog>
+      </dialog>,
+        document.body,
+      )}
     </div>
   )
 }
