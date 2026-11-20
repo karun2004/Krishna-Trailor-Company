@@ -1,9 +1,12 @@
 import { NextResponse } from 'next/server'
 import { requireAdminApi } from '@/lib/auth'
 
-/** Stub: real create logic lands with the CRUD primitives (Task 11). */
+/**
+ * Services are mutated through Server Actions (src/app/admin/(shell)/services/actions.ts).
+ * This endpoint stays admin-gated (401 without an admin session) and is not a create API.
+ */
 export async function POST() {
   const auth = await requireAdminApi()
   if (!auth.ok) return auth.response
-  return NextResponse.json({ error: 'Not implemented' }, { status: 501 })
+  return NextResponse.json({ error: 'Use the admin services screen' }, { status: 405 })
 }
