@@ -155,7 +155,14 @@ export async function POST(req: Request) {
 
   // 3. Rate limit (DB-backed, per hashed IP).
   const admin = createAdminClient()
-  const limit = await checkEnquiryRateLimit(admin, getClientIp(req.headers))
+  let limit
+  try {
+    limit = await checkEnquiryRateLimit(admin, getClientIp(req.headers))
+  } catch (e) {
+    // Misconfiguration (e.g. missing ENQUIRY_IP_PEPPER in production): fail closed, never store the enquiry.
+    console.error('[enquiry] rate limiting misconfigured:', e instanceof Error ? e.message : e)
+    return bad('We could not process your enquiry right now. Please try again shortly.', undefined, 500)
+  }
   if (!limit.ok) {
     if ('error' in limit) {
       return bad('We could not process your enquiry right now. Please try again shortly.', undefined, 503)

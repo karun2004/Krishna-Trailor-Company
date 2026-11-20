@@ -19,9 +19,28 @@ export function getClientIp(headers: Headers): string {
   return 'unknown'
 }
 
+/** Development/test-only default. NEVER used when NODE_ENV === 'production'. */
+export const DEV_ONLY_IP_PEPPER = 'ktc-enquiry-ip-pepper'
+export const MIN_PEPPER_LENGTH = 16
+
+/**
+ * The IP-hash pepper. In production a missing or short (<16 chars) ENQUIRY_IP_PEPPER throws (fail closed)
+ * instead of silently using a public constant; dev/test fall back to DEV_ONLY_IP_PEPPER.
+ */
+export function resolvePepper(env: NodeJS.ProcessEnv = process.env): string {
+  const pepper = env.ENQUIRY_IP_PEPPER
+  if (env.NODE_ENV === 'production') {
+    if (!pepper || pepper.length < MIN_PEPPER_LENGTH) {
+      throw new Error(`ENQUIRY_IP_PEPPER must be set to a secret of at least ${MIN_PEPPER_LENGTH} characters in production`)
+    }
+    return pepper
+  }
+  return pepper || DEV_ONLY_IP_PEPPER
+}
+
 /** Keyed hash (HMAC-SHA256) so the stored value cannot be reversed by enumerating IPv4 space. */
 export function hashIp(ip: string): string {
-  const pepper = process.env.ENQUIRY_IP_PEPPER || 'ktc-enquiry-ip-pepper'
+  const pepper = resolvePepper()
   return createHmac('sha256', pepper).update(ip).digest('hex')
 }
 
