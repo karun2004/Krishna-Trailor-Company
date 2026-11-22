@@ -13,6 +13,7 @@
   --font-display: var(--font-sora), ui-sans-serif, system-ui, sans-serif;
   --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+  --font-hero: var(--font-archivo), var(--font-sora), ui-sans-serif, system-ui, sans-serif;
 }
 
 body {
@@ -69,3 +70,48 @@ html {
     scroll-behavior: auto;
   }
 }
+
+/* Outlined display type (hero headings). Stroke is painted outside the glyph so thin counters stay open. */
+.outline-text {
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 2px var(--outline, #fff);
+  paint-order: stroke fill;
+  /* A little lift: soft shadow plus a faint inner tint so the outlined type reads over photos. */
+  filter: drop-shadow(0 4px 14px rgba(0,0,0,0.45));
+  background: linear-gradient(rgba(255,255,255,0.07), rgba(255,255,255,0.07));
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+@media (min-width: 768px) {
+  .outline-text { -webkit-text-stroke-width: 2.5px; }
+}
+
+/* Route + outline animation for the India map (kept off for reduced motion). */
+@keyframes ktc-dash { to { stroke-dashoffset: -24; } }
+.map-route-flow { animation: ktc-dash 1.6s linear infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .map-route-flow { animation: none; }
+}
+
+/* Admin panel: same visual language as the public site (black, orange, outline-free heavy type, pill controls, mono labels). */
+.admin-theme { font-family: var(--font-sans); }
+.admin-theme h1, .admin-theme h2 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  color: #101010;
+}
+.admin-theme h1 { font-size: 1.875rem; line-height: 1; }
+.admin-theme h3 { font-family: var(--font-display); font-weight: 700; text-transform: uppercase; letter-spacing: -0.01em; }
+.admin-theme button:not([role="switch"]):not([aria-pressed]):not([class*="rounded-full"]) { border-radius: 9999px; }
+.admin-theme button[type="submit"], .admin-theme button.bg-navy {
+  background: #101010; color: #fff; font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase; border-radius: 9999px;
+}
+.admin-theme button[type="submit"]:hover, .admin-theme button.bg-navy:hover { background: var(--color-orange); color: #101010; }
+.admin-theme label, .admin-theme th { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; }
+.admin-theme input:not([type="checkbox"]):not([type="radio"]):not([type="file"]), .admin-theme select, .admin-theme textarea { border-radius: 0.75rem; }
+.admin-theme header { background: #fff; }
+.admin-theme .text-navy { color: #101010; }
+.admin-theme .border-navy\/10, .admin-theme .border-navy\/20 { border-color: rgba(16, 16, 16, 0.12); }

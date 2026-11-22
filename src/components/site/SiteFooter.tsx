@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import { getOffices, getSiteSettings } from '@/lib/queries'
 import { buildFooterData, type FooterData } from './footer-data'
@@ -20,7 +21,7 @@ export async function SiteFooter() {
     <SectionShell as="footer" variant="black" className="!py-16">
       <div className="grid gap-12 md:grid-cols-[1.2fr_1fr_1.4fr]">
         <div>
-          <p className="font-display text-2xl font-extrabold uppercase tracking-tight">{data.companyName ?? 'Krishna Trailor Company'}</p>
+          <Image src="/logos/ktc-logo.jpeg" alt={data.companyName ?? 'Krishna Trailor Company'} width={2536} height={910} sizes="260px" className="h-auto w-64 rounded-lg bg-white p-2" />
         </div>
         <nav aria-label="Footer">
           <MonoLabel className="mb-4">Explore</MonoLabel>

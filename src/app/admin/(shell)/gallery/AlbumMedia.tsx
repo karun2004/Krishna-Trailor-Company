@@ -6,7 +6,7 @@ import { addAlbumMedia, removeAlbumMedia, reorderAlbumMedia, updateAlbumMedia } 
 export function AlbumMedia({ albumId, items }: { albumId: string; items: MediaItem[] }) {
   return (
     <MediaItemsManager
-      heading="Album images"
+      heading="Album images and videos"
       withPhase={false}
       items={items}
       actions={{

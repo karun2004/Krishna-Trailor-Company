@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useId, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { getMediaForPicker, listMediaForPicker, type PickerMedia } from '@/lib/admin/media-actions'
-import { MEDIA_CATEGORIES } from '@/lib/validation/media'
+import { MEDIA_CATEGORIES, isVideoMime } from '@/lib/validation/media'
 
 export type MediaPickerProps = {
   /** Selected media_assets.id (or null). */
@@ -75,8 +75,12 @@ export function MediaPicker({ value, onChange, label, category: initialCategory 
     <div>
       <div className="flex items-center gap-3">
         {selected ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={selected.url} alt={selected.alt ?? ''} className="h-16 w-24 rounded border border-navy/10 object-cover" />
+          isVideoMime(selected.mime) ? (
+            <video src={`${selected.url}#t=0.1`} muted preload="metadata" className="h-16 w-24 rounded border border-navy/10 object-cover" />
+          ) : (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={selected.url} alt={selected.alt ?? ''} className="h-16 w-24 rounded border border-navy/10 object-cover" />
+          )
         ) : (
           <div aria-hidden="true" className="flex h-16 w-24 items-center justify-center rounded border border-dashed border-navy/30 text-xs text-black/60">
             {value ? '…' : 'None'}
@@ -135,8 +139,12 @@ export function MediaPicker({ value, onChange, label, category: initialCategory 
                   <button type="button" onClick={() => pick(m)} aria-pressed={m.id === value}
                     aria-label={`Select ${m.alt || m.category + ' image'}`}
                     className={`block w-full overflow-hidden rounded border-2 focus-visible:outline-2 focus-visible:outline-orange ${m.id === value ? 'border-orange' : 'border-transparent hover:border-navy/30'}`}>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={m.url} alt="" loading="lazy" className="aspect-[4/3] w-full object-cover" />
+                    {isVideoMime(m.mime) ? (
+                      <video src={`${m.url}#t=0.1`} muted preload="metadata" className="aspect-[4/3] w-full bg-black object-cover" />
+                    ) : (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={m.url} alt="" loading="lazy" className="aspect-[4/3] w-full object-cover" />
+                    )}
                     <span className="block truncate px-1 py-1 text-left text-xs text-black/70">{m.alt || m.category}</span>
                   </button>
                 </li>

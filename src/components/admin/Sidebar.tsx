@@ -7,6 +7,8 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 export const ADMIN_SECTIONS = [
   { href: '/admin', label: 'Dashboard' },
   { href: '/admin/media', label: 'Media' },
+  { href: '/admin/page-images', label: 'Page images' },
+  { href: '/admin/sections', label: 'Sections' },
   { href: '/admin/divisions', label: 'Divisions' },
   { href: '/admin/services', label: 'Services' },
   { href: '/admin/fleet', label: 'Fleet' },
@@ -62,7 +64,7 @@ export function Sidebar({ signOut, email }: { signOut: () => Promise<void>; emai
               <path d="M3 5h14M3 10h14M3 15h14" />
             </svg>
           </button>
-          <span className="font-display text-base font-semibold text-navy md:hidden">KTC Admin</span>
+          <span className="font-display text-base font-extrabold uppercase text-black md:hidden">KTC Admin</span>
         </div>
         <div className="flex items-center gap-3">
           <span className="hidden text-sm text-black/70 sm:inline">{email}</span>
@@ -82,11 +84,11 @@ export function Sidebar({ signOut, email }: { signOut: () => Promise<void>; emai
       )}
 
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-64 overflow-y-auto bg-navy text-white transition-transform md:z-40 md:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 w-64 overflow-y-auto bg-black text-white transition-transform md:z-40 md:translate-x-0 ${
           open ? 'translate-x-0' : '-translate-x-full invisible md:visible'
         }`}
       >
-        <div className="flex h-14 items-center px-5 font-display text-lg font-semibold">KTC Admin</div>
+        <div className="flex h-14 items-center gap-2 px-5 font-display text-xl font-extrabold uppercase tracking-tight">KTC <span className="font-mono text-[10px] font-medium tracking-[0.18em] text-orange">Admin</span></div>
         <nav id="admin-nav" aria-label="Admin sections" className="px-3 pb-6">
           <ul className="space-y-1">
             {ADMIN_SECTIONS.map(({ href, label }) => {
@@ -97,7 +99,7 @@ export function Sidebar({ signOut, email }: { signOut: () => Promise<void>; emai
                     href={href}
                     aria-current={active ? 'page' : undefined}
                     onClick={() => setOpen(false)}
-                    className={`block rounded px-3 py-2 text-sm font-medium focus-visible:outline-2 focus-visible:outline-orange ${
+                    className={`block rounded-full px-4 py-2 font-mono text-[11px] font-medium uppercase tracking-[0.14em] focus-visible:outline-2 focus-visible:outline-orange ${
                       active ? 'bg-orange text-black' : 'text-white/85 hover:bg-white/10'
                     }`}
                   >

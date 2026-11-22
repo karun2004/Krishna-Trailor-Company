@@ -1,7 +1,10 @@
-import { Button, Card, GhostHeadline, MediaImage, MonoLabel, SectionShell } from '@/components/site'
+import { Button, Card, MediaImage, PageHero, SectionShell } from '@/components/site'
 import { CtaBlock } from '@/components/site/pages/CtaBlock'
 import { getFleetItems } from '@/lib/queries'
 import { buildMetadata } from '@/lib/seo'
+import { CustomSections } from '@/components/site/CustomSections'
+import { getSlots, withFallback } from '@/lib/queries/slots'
+import { FLEET_FALLBACK } from '@/lib/media-slots'
 
 export const dynamic = 'force-dynamic'
 export const generateMetadata = () => buildMetadata('fleet', { title: 'Our Fleet', description: 'The trailers, tractors and buses in the Krishna Trailor Company fleet.', path: '/fleet' })
@@ -16,7 +19,8 @@ function specRows(spec: Record<string, unknown>): [string, string][] {
 
 export default async function FleetPage({ searchParams }: { searchParams: Promise<{ category?: string | string[] }> }) {
   const sp = await searchParams
-  const all = await getFleetItems()
+  const slot = await getSlots('fleet')
+  const all = (await getFleetItems()).map((i) => ({ ...i, media: withFallback(i.media, FLEET_FALLBACK[i.category], i.name) }))
   const categories = [...new Set(all.map((i) => i.category))]
   const raw = Array.isArray(sp.category) ? sp.category[0] : sp.category
   const active = raw && categories.includes(raw) ? raw : null
@@ -24,11 +28,9 @@ export default async function FleetPage({ searchParams }: { searchParams: Promis
 
   return (
     <>
-      <SectionShell variant="black">
-        <MonoLabel index={1}>Fleet</MonoLabel>
-        <GhostHeadline as="h1" on="dark" className="mt-6">Our Fleet</GhostHeadline>
-      </SectionShell>
+      <PageHero label="Fleet" title="Our Fleet" media={slot('hero')} lead="Prime movers, trailers, hydraulic axles and machines, kept road-ready." />
 
+      <CustomSections page="fleet" placement="top" />
       {all.length === 0 ? (
         <CtaBlock label="Fleet" title="Fleet details coming soon" body="We are preparing our fleet listing. Contact us for current equipment and availability." />
       ) : (
@@ -66,6 +68,7 @@ export default async function FleetPage({ searchParams }: { searchParams: Promis
           </ul>
         </SectionShell>
       )}
+      <CustomSections page="fleet" placement="bottom" />
       {all.length > 0 && <CtaBlock label="Enquire" title="Need equipment for your project?" body="Contact us for availability and specifications." />}
     </>
   )

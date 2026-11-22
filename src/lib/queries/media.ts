@@ -7,13 +7,14 @@ type MediaRow = {
   alt: string | null
   width: number | null
   height: number | null
+  mime_type?: string | null
 }
 
-const MEDIA_COLS = 'id, storage_path, bucket, alt, width, height'
+const MEDIA_COLS = 'id, storage_path, bucket, alt, width, height, mime_type'
 
 export function toMediaRef(db: Db, row: MediaRow): MediaRef {
   const { data } = db.storage.from(row.bucket).getPublicUrl(row.storage_path)
-  return { url: data.publicUrl, alt: row.alt, width: row.width, height: row.height }
+  return { url: data.publicUrl, alt: row.alt, width: row.width, height: row.height, mime: row.mime_type ?? null }
 }
 
 /** Batch-resolve media ids. Missing/deleted ids are simply absent from the map. Never throws on dangling refs. */

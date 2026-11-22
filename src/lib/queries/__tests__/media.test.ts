@@ -11,7 +11,7 @@ const fakeDb = (rows: unknown[] = []) =>
 describe('media helpers', () => {
   it('builds a public ref from a row', () => {
     const ref = toMediaRef(fakeDb(), { id: '1', storage_path: 'a/b.jpg', bucket: 'media', alt: 'Alt', width: 10, height: 20 })
-    expect(ref).toEqual({ url: 'http://x/media/a/b.jpg', alt: 'Alt', width: 10, height: 20 })
+    expect(ref).toEqual({ url: 'http://x/media/a/b.jpg', alt: 'Alt', width: 10, height: 20, mime: null })
   })
   it('resolveMedia returns null for null id without querying', async () => {
     expect(await resolveMedia(fakeDb(), null)).toBeNull()

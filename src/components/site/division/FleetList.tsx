@@ -1,5 +1,6 @@
 import { RevealGroup } from '../anim'
 import { MediaImage } from '@/components/site'
+import { BENTO_GRID, bentoSpan } from '../bento'
 import type { FleetItem, WithMedia } from '@/lib/queries/types'
 
 function specs(s: Record<string, unknown>) {
@@ -9,11 +10,11 @@ function specs(s: Record<string, unknown>) {
 export function FleetList({ items, tone }: { items: WithMedia<FleetItem>[]; tone: 'light' | 'dark' | 'radhe' }) {
   const card = tone === 'dark' ? 'border border-white/15 bg-white/[0.03]' : tone === 'radhe' ? 'rounded-3xl bg-white text-[#14243a]' : 'border border-black/15 bg-white text-black'
   return (
-    <RevealGroup as="ul" className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {items.map((f) => {
+    <RevealGroup as="ul" className={BENTO_GRID}>
+      {items.map((f, i) => {
         const sp = specs(f.specifications)
         return (
-          <li key={f.id} className={`overflow-hidden ${tone === 'radhe' ? '' : 'rounded-sm'} ${card}`}>
+          <li key={f.id} className={`${bentoSpan(i, items.length)} overflow-hidden ${tone === 'radhe' ? '' : 'rounded-sm'} ${card}`}>
             {f.media ? <MediaImage media={f.media} aspect="16/10" sizes="(min-width:1024px) 33vw, 100vw" /> : null}
             <div className="p-5">
               <h3 className="font-display text-lg font-bold uppercase">{f.name}</h3>

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { sora, manrope, mono } from "@/lib/fonts";
+import { sora, manrope, mono, hero } from "@/lib/fonts";
 import { siteUrl } from "@/lib/seo";
 import "./globals.css";
 
@@ -16,7 +16,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${sora.variable} ${manrope.variable} ${mono.variable}`}
+      className={`${sora.variable} ${manrope.variable} ${mono.variable} ${hero.variable}`}
     >
       <body className="antialiased">{children}</body>
     </html>

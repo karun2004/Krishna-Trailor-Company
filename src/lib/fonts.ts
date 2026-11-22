@@ -1,4 +1,4 @@
-import { Sora, Manrope, JetBrains_Mono } from 'next/font/google'
+import { Sora, Manrope, JetBrains_Mono, Archivo_Black } from 'next/font/google'
 
 export const sora = Sora({
   subsets: ['latin'],
@@ -18,4 +18,12 @@ export const mono = JetBrains_Mono({
   display: 'swap',
 })
 
-export const fonts = { sora, manrope, mono }
+/** Single-weight heavy face for outlined hero type: static outlines, so no overlapping-contour artefacts when stroked. */
+export const hero = Archivo_Black({
+  subsets: ['latin'],
+  weight: '400',
+  variable: '--font-archivo',
+  display: 'swap',
+})
+
+export const fonts = { sora, manrope, mono, hero }

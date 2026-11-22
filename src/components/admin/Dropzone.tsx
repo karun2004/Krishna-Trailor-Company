@@ -74,13 +74,13 @@ export function Dropzone({ onUploaded }: { onUploaded: (raw: LibraryAsset) => vo
         onDrop={(e) => { e.preventDefault(); setOver(false); void handle(e.dataTransfer.files) }}
         className={`mt-3 flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed px-4 py-8 text-center text-sm focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-orange ${over ? 'border-orange bg-orange/10' : 'border-navy/30 bg-soft'}`}
       >
-        <span className="font-medium text-navy">Drag and drop images here, or click to choose</span>
-        <span className="mt-1 text-black/70">JPEG, PNG, WebP or AVIF, up to 10MB each</span>
+        <span className="font-medium text-navy">Drag and drop images or videos here, or click to choose</span>
+        <span className="mt-1 text-black/70">Images: JPEG, PNG, WebP or AVIF, up to 10MB. Videos: MP4 or WebM, up to 50MB</span>
         <input
           type="file"
           multiple
-          accept="image/jpeg,image/png,image/webp,image/avif"
-          aria-label="Choose images to upload"
+          accept="image/jpeg,image/png,image/webp,image/avif,video/mp4,video/webm"
+          aria-label="Choose images or videos to upload"
           className="sr-only"
           onChange={(e) => { if (e.target.files) void handle(e.target.files); e.target.value = '' }}
         />

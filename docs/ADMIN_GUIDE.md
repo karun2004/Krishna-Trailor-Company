@@ -40,6 +40,10 @@ Open **Media** in the sidebar.
 - Files are checked by their contents, not just their names. A file renamed to look like a photo is rejected.
 - If a photo is larger than 10 MB, reduce its size first (most phones can do this in the share or export options).
 
+**Page images** (sidebar, under Media)
+
+Every named picture container on the public pages (page headers, Our Story tiles, haulage showcase) is listed by page. Upload the photo in Media, open Page images, choose it for the container and select Save. The site updates straight away. A container with nothing chosen shows `/images/<file>` from the project folder when that file exists (see `IMAGE_PROMPTS.md`), otherwise a dark placeholder. Fleet, service, division and project photos are chosen on their own screens and use the same folder as a fallback.
+
 **Alt text (required for every photo you use)**
 - Describe what is in the photo in one short sentence: "Low-bed trailer carrying an excavator on the highway."
 - Screen readers read it out, and it appears if the photo fails to load.
@@ -153,3 +157,17 @@ Enquiries are limited to 5 submissions per 10 minutes from one internet address.
 | Changes not visible | Reload the public page. Check the item is published. |
 | Homepage block error | See the JSON hint in section 9. |
 | Customer says the form did not send | Ask them to try again in a few minutes. If it keeps failing, contact the person who manages the website. |
+
+
+## Projects: videos and images
+
+The Projects page has two fixed sub-sections fed by two Gallery albums that are created for you:
+
+1. Upload files in **Media**. Photos: JPEG, PNG, WebP or AVIF (10MB). Videos: MP4 or WebM (50MB).
+2. Open **Gallery**, choose **Project videos** or **Project images**, and add items. Add a caption if you like and drag to reorder.
+
+Videos placed in the images album (or photos in the videos album) are ignored on the public page.
+
+## Editing page images
+
+**Page images** lists every picture container by page (Home hero, Home industries tiles, About story tiles, Radhe Travels route cards, and so on). Pick a photo and press Save; the page updates straight away. Containers with no photo and no file in `public/images` stay hidden.

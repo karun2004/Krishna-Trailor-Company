@@ -1,5 +1,6 @@
 'use client'
 
+import { isVideoUrl } from '@/lib/validation/media'
 import { assetName, humanCategory, type LibraryAsset } from '@/lib/media-library'
 
 const btn =
@@ -28,8 +29,12 @@ export function MediaGrid({
               aria-pressed={selected}
               className="block w-full text-left focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-orange"
             >
-              {/* eslint-disable-next-line @next/next/no-img-element -- admin thumbnails from Supabase storage */}
-              <img src={a.url} alt={a.alt ?? ''} loading="lazy" className="aspect-[4/3] w-full bg-soft object-cover" />
+              {isVideoUrl(a.url) ? (
+                <video src={`${a.url}#t=0.1`} muted preload="metadata" aria-label={a.alt ?? 'Video'} className="aspect-[4/3] w-full bg-black object-cover" />
+              ) : (
+                // eslint-disable-next-line @next/next/no-img-element -- admin thumbnails from Supabase storage
+                <img src={a.url} alt={a.alt ?? ''} loading="lazy" className="aspect-[4/3] w-full bg-soft object-cover" />
+              )}
               <span className="block p-2">
                 <span className="block truncate text-sm font-medium text-navy">{name}</span>
                 <span className="block text-xs text-black/70">{humanCategory(a.category)}</span>

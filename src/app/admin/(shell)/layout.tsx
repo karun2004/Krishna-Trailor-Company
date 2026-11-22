@@ -14,7 +14,7 @@ async function signOut() {
 export default async function AdminShellLayout({ children }: { children: React.ReactNode }) {
   const { user } = await requireAdmin()
   return (
-    <div className="min-h-screen bg-soft text-black">
+    <div className="admin-theme min-h-screen bg-soft text-black">
       <Sidebar signOut={signOut} email={user.email ?? ''} />
       <div className="md:pl-64">{children}</div>
     </div>

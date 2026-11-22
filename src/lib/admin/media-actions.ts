@@ -4,7 +4,7 @@ import { requireAdmin } from '@/lib/auth'
 import { createServerClient } from '@/lib/supabase/server'
 import { MEDIA_CATEGORIES } from '@/lib/validation/media'
 
-export type PickerMedia = { id: string; url: string; alt: string | null; category: string; width: number | null; height: number | null }
+export type PickerMedia = { id: string; url: string; alt: string | null; category: string; width: number | null; height: number | null; mime: string | null }
 
 const PAGE = 24
 const querySchema = z.object({
@@ -13,8 +13,8 @@ const querySchema = z.object({
   offset: z.number().int().min(0).max(100_000).default(0),
 })
 
-type Row = { id: string; storage_path: string; bucket: string; alt: string | null; category: string; width: number | null; height: number | null }
-const COLS = 'id, storage_path, bucket, alt, category, width, height'
+type Row = { id: string; storage_path: string; bucket: string; alt: string | null; category: string; width: number | null; height: number | null; mime_type: string | null }
+const COLS = 'id, storage_path, bucket, alt, category, width, height, mime_type'
 
 async function toPicker(rows: Row[]): Promise<PickerMedia[]> {
   const db = await createServerClient()
@@ -25,6 +25,7 @@ async function toPicker(rows: Row[]): Promise<PickerMedia[]> {
     category: r.category,
     width: r.width,
     height: r.height,
+    mime: r.mime_type,
   }))
 }
 

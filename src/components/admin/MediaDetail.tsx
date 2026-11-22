@@ -5,6 +5,7 @@ import {
   assetName, formatBytes, humanCategory, placesLabel, type LibraryAsset, type UsageRow,
 } from '@/lib/media-library'
 import { mediaPublicUrl } from '@/lib/media-library'
+import { isVideoUrl } from '@/lib/validation/media'
 
 const field =
   'mt-1 w-full rounded-md border border-navy/20 bg-white px-3 py-2 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange'
@@ -103,8 +104,12 @@ export function MediaDetail({
           <h2 className="min-w-0 truncate font-display text-lg font-semibold text-navy">{assetName(asset)}</h2>
           <button type="button" onClick={onClose} className={`${btn} border border-navy/20 text-navy`}>Close</button>
         </div>
-        {/* eslint-disable-next-line @next/next/no-img-element -- admin preview from Supabase storage */}
-        <img src={asset.url} alt={asset.alt ?? ''} className="mt-3 max-h-64 w-full rounded-md bg-soft object-contain" />
+        {isVideoUrl(asset.url) ? (
+          <video src={asset.url} controls preload="metadata" className="mt-3 max-h-64 w-full rounded-md bg-black object-contain" />
+        ) : (
+          // eslint-disable-next-line @next/next/no-img-element -- admin preview from Supabase storage
+          <img src={asset.url} alt={asset.alt ?? ''} className="mt-3 max-h-64 w-full rounded-md bg-soft object-contain" />
+        )}
         <p className="mt-2 text-xs text-black/70">
           {humanCategory(asset.category)} · {asset.width ?? '?'}×{asset.height ?? '?'} · {asset.mime_type} · {formatBytes(asset.size_bytes)}
         </p>
@@ -122,11 +127,11 @@ export function MediaDetail({
         </form>
 
         <div className="mt-4">
-          <label htmlFor={repId} className="text-sm font-medium text-navy">Replace image</label>
+          <label htmlFor={repId} className="text-sm font-medium text-navy">Replace file</label>
           <input
             id={repId}
             type="file"
-            accept="image/jpeg,image/png,image/webp,image/avif"
+            accept="image/jpeg,image/png,image/webp,image/avif,video/mp4,video/webm"
             disabled={busy}
             onChange={(e) => { const f = e.target.files?.[0]; if (f) void replace(f); e.target.value = '' }}
             className="mt-1 block w-full text-sm file:mr-3 file:rounded-md file:border file:border-navy/20 file:bg-white file:px-3 file:py-2 file:text-navy focus-visible:outline-2 focus-visible:outline-orange"

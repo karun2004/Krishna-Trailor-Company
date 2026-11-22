@@ -1,4 +1,5 @@
 import 'server-only'
+import { cache } from 'react'
 import { redirect } from 'next/navigation'
 import { NextResponse } from 'next/server'
 import type { User } from '@supabase/supabase-js'
@@ -11,7 +12,8 @@ export type AdminSession = { user: User }
  * Supabase Auth via getUser(), not merely decoded from the cookie) and (2) a
  * profiles row with role = 'admin' exists for them. Any failure => null (fail closed).
  */
-export async function getAdminUser(): Promise<User | null> {
+/** Wrapped in React cache(): the layout and the page both call it, so one request makes one auth round trip. */
+export const getAdminUser = cache(async function getAdminUser(): Promise<User | null> {
   const supabase = await createServerClient()
   const { data, error } = await supabase.auth.getUser()
   if (error || !data.user) return null
@@ -23,7 +25,7 @@ export async function getAdminUser(): Promise<User | null> {
     .maybeSingle()
   if (profileError || profile?.role !== 'admin') return null
   return data.user
-}
+})
 
 /** For pages and Server Actions: redirects to the login page unless the caller is an admin. */
 export async function requireAdmin(): Promise<AdminSession> {

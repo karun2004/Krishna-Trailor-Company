@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import {
   getDivision, getFaqs, getFleetItems, getPageContent, getProjects, getSeo, getServices, getSiteSettings,
 } from '@/lib/queries'
+import { getSlots, withFallback } from '@/lib/queries/slots'
+import { FLEET_FALLBACK, SERVICE_FALLBACK } from '@/lib/media-slots'
 
 export type DivisionKey = 'krishna' | 'haulage' | 'radhe'
 
@@ -51,8 +53,13 @@ export async function loadDivisionPage(key: DivisionKey) {
     divisionId ? getFaqs(divisionId) : Promise.resolve([]),
     divisionId ? getProjects({ divisionId }) : Promise.resolve([]),
   ])
-  const services = cfg.serviceCategory ? allServices.filter((s) => s.category === cfg.serviceCategory) : allServices
-  const fleet = allFleet.filter((f) => (divisionId && f.division_id === divisionId) || (!f.division_id && (cfg.fleetCategories as readonly string[]).includes(f.category)))
+  const slot = await getSlots(cfg.pageKey)
+  const heroMedia = slot('hero')
+  const services = (cfg.serviceCategory ? allServices.filter((s) => s.category === cfg.serviceCategory) : allServices)
+    .map((s) => ({ ...s, media: withFallback(s.media, SERVICE_FALLBACK[s.slug], s.name) }))
+  const fleet = allFleet
+    .filter((f) => (divisionId && f.division_id === divisionId) || (!f.division_id && (cfg.fleetCategories as readonly string[]).includes(f.category)))
+    .map((f) => ({ ...f, media: withFallback(f.media, FLEET_FALLBACK[f.category], f.name) }))
   const contact = (settings.contact && typeof settings.contact === 'object' ? settings.contact : {}) as Record<string, unknown>
   const phones: { name?: string; number: string }[] = []
   const office = text(contact.office_phone)
@@ -63,5 +70,5 @@ export async function loadDivisionPage(key: DivisionKey) {
       if (n) phones.push({ name: text((p as Record<string, unknown>)?.name), number: n })
     }
   }
-  return { division, content, services, fleet, faqs, projects, phones, intro: text(content.intro?.content) }
+  return { slot, heroMedia: heroMedia ?? division?.media ?? null, division, content, services, fleet, faqs, projects, phones, intro: text(content.intro?.content) }
 }

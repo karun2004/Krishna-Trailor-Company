@@ -29,7 +29,7 @@ export function SectionShell({
   variant = 'white', as: Tag = 'section', id, labelledBy, padded = true, contained = true, className, children,
 }: SectionShellProps) {
   return (
-    <Tag id={id} aria-labelledby={labelledBy} data-variant={variant} className={cn('w-full overflow-x-clip', VARIANTS[variant], padded && 'py-20 md:py-28', className)}>
+    <Tag id={id} aria-labelledby={labelledBy} data-variant={variant} className={cn('w-full overflow-x-clip', VARIANTS[variant], padded && 'py-12 md:py-16', className)}>
       {contained ? <div className="mx-auto w-full max-w-7xl px-5 md:px-8">{children}</div> : children}
     </Tag>
   )

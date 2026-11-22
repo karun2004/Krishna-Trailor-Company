@@ -13,6 +13,8 @@ export type MediaRef = {
   alt: string | null
   width: number | null
   height: number | null
+  /** media_assets.mime_type; video/* for clips. */
+  mime?: string | null
 }
 
 export type WithMedia<T> = T & { media: MediaRef | null }

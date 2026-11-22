@@ -1,4 +1,5 @@
 'use client'
+import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
@@ -45,7 +46,9 @@ export function SiteNav() {
     <>
       <header className="sticky top-0 z-50 border-b border-black/10 bg-white/90 text-black backdrop-blur">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-5 md:px-8">
-          <Link href="/" className="font-display text-lg font-extrabold uppercase tracking-tight" aria-label="KTC, Krishna Trailor Company home">KTC</Link>
+          <Link href="/" className="flex items-center" aria-label="KTC, Krishna Trailor Company home">
+            <Image src="/logos/ktc-logo.jpeg" alt="" width={2536} height={910} priority sizes="140px" className="h-9 w-auto mix-blend-multiply" />
+          </Link>
           <nav aria-label="Primary" className="hidden items-center gap-4 md:flex lg:gap-6">
             {NAV_LINKS.map((l) => (
               <Link key={l.href} href={l.href} className={linkCls(l.href)} aria-current={isActive(pathname, l.href) ? 'page' : undefined}>{l.label}</Link>

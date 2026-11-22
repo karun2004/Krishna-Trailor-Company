@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { useState, useTransition } from 'react'
 import { MediaPicker } from '@/components/admin/MediaPicker'
+import { isVideoUrl } from '@/lib/validation/media'
 import { moveItem, type ActionResult } from '@/lib/admin/fields'
 
 export type MediaItem = { id: string; media_id: string | null; url: string | null; alt: string | null; caption: string | null; phase?: string }
@@ -18,7 +19,7 @@ const PHASES = ['before', 'during', 'after'] as const
 const btn =
   'rounded border border-navy/20 px-2.5 py-1 text-sm font-medium text-navy hover:bg-soft focus-visible:outline-2 focus-visible:outline-orange disabled:opacity-50'
 
-/** Ordered image list with add (MediaPicker), optional before/during/after tag, caption, reorder, remove. */
+/** Ordered image or video list with add (MediaPicker), optional before/during/after tag, caption, reorder, remove. */
 export function MediaItemsManager({ items: initial, actions, withPhase, heading }: {
   items: MediaItem[]
   actions: MediaItemsActions
@@ -71,13 +72,17 @@ export function MediaItemsManager({ items: initial, actions, withPhase, heading 
       </div>
       <div role="status" aria-live="polite" className="min-h-5 text-sm text-black/70">{message}</div>
       {error && <p role="alert" className="text-sm text-red-700">{error}</p>}
-      {items.length === 0 && <p className="text-sm text-black/70">No images yet.</p>}
+      {items.length === 0 && <p className="text-sm text-black/70">Nothing added yet.</p>}
       <ul className="space-y-3">
         {items.map((it, i) => (
           <li key={it.id} data-testid="media-item" className="flex flex-wrap items-start gap-3 rounded border border-navy/10 p-3">
             {it.url ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={it.url} alt={it.alt ?? ''} className="h-20 w-28 rounded object-cover" />
+              isVideoUrl(it.url) ? (
+                <video src={`${it.url}#t=0.1`} muted preload="metadata" className="h-20 w-28 rounded bg-black object-cover" />
+              ) : (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={it.url} alt={it.alt ?? ''} className="h-20 w-28 rounded object-cover" />
+              )
             ) : (
               <div className="flex h-20 w-28 items-center justify-center rounded border border-dashed text-xs">Missing</div>
             )}

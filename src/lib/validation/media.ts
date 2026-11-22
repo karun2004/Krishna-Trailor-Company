@@ -14,7 +14,18 @@ export const ALLOWED_MIME = {
 } as const
 export type AllowedMime = keyof typeof ALLOWED_MIME
 
+export const ALLOWED_VIDEO_MIME = {
+  'video/mp4': 'mp4',
+  'video/webm': 'webm',
+} as const
+export type AllowedVideoMime = keyof typeof ALLOWED_VIDEO_MIME
+export const isVideoMime = (mime: string | null | undefined): boolean => !!mime && mime in ALLOWED_VIDEO_MIME
+
+/** Storage paths keep the upload extension, so a URL is enough to tell a clip from a photo. */
+export const isVideoUrl = (url: string | null | undefined): boolean => !!url && /\.(mp4|webm)(\?|#|$)/i.test(url)
+
 export const MAX_UPLOAD_BYTES = 10 * 1024 * 1024
+export const MAX_VIDEO_BYTES = 50 * 1024 * 1024
 
 const category = z.enum(MEDIA_CATEGORIES)
 const text = z.string().trim().max(500)
@@ -32,8 +43,15 @@ export const patchSchema = z
 export type FileCheck = { ok: true } | { ok: false; reason: string }
 
 export function validateFile(mime: string, size: number): FileCheck {
+  if (isVideoMime(mime)) {
+    if (size <= 0) return { ok: false, reason: 'The file is empty.' }
+    if (size > MAX_VIDEO_BYTES) {
+      return { ok: false, reason: `Video is too large (${(size / 1048576).toFixed(1)}MB). The limit is 50MB.` }
+    }
+    return { ok: true }
+  }
   if (!(mime in ALLOWED_MIME)) {
-    return { ok: false, reason: `File type "${mime || 'unknown'}" is not allowed. Use JPEG, PNG, WebP or AVIF.` }
+    return { ok: false, reason: `File type "${mime || 'unknown'}" is not allowed. Use JPEG, PNG, WebP or AVIF (images) or MP4 or WebM (video).` }
   }
   if (size <= 0) return { ok: false, reason: 'The file is empty.' }
   if (size > MAX_UPLOAD_BYTES) {
